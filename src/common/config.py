@@ -20,12 +20,18 @@ class ServerConfig:
     ### Уровень отладки
     log_level = os.getenv("log_level") or "debug"
 
+    ### Тип базы данных
+    db_type = os.getenv("db_type") or "mysql"
+
     ### MySQL
     db_host = os.getenv("db_host") or "127.0.0.1"
     db_port = int(os.getenv("db_port") or 3306)
     db_user = os.getenv("db_user") or "root"
     db_password = os.getenv("db_password") or "qwerty"
     db_name = os.getenv("db_name") or "openmax"
+
+    ### SQLite
+    db_file = os.getenv("db_file") or "openmax.db"
 
     ### SSL
     certfile = os.getenv("certfile") or "cert.pem"

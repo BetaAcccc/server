@@ -1,5 +1,5 @@
 # Импортирование библиотек
-import aiomysql, ssl, logging, asyncio
+import ssl, logging, asyncio
 from common.config import ServerConfig
 from oneme_tcp.controller import OnemeMobileController
 from telegrambot.controller import TelegramBotController
@@ -10,16 +10,24 @@ server_config = ServerConfig()
 
 async def init_db():
     """Инициализация базы данных"""
-    # Создаем пул
-    db = await aiomysql.create_pool(
-        host=server_config.db_host,
-        port=server_config.db_port,
-        user=server_config.db_user,
-        password=server_config.db_password,
-        db=server_config.db_name,
-        cursorclass=aiomysql.DictCursor,
-        autocommit=True
-    )
+
+    db = {}
+
+    if server_config.db_type == "mysql":
+        import aiomysql
+        db = await aiomysql.create_pool(
+            host=server_config.db_host,
+            port=server_config.db_port,
+            user=server_config.db_user,
+            password=server_config.db_password,
+            db=server_config.db_name,
+            cursorclass=aiomysql.DictCursor,
+            autocommit=True
+        )
+    elif server_config.db_type == "sqlite":
+        import aiosqlite
+        raw_db = await aiosqlite.connect(server_config.db_file)
+        db["acquire"] = raw_db
 
     # Возвращаем
     return db

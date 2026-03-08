@@ -1,4 +1,4 @@
 __pycache__
 .env
-cert.pem
-key.pem
+*.pem
+*.sqlite
